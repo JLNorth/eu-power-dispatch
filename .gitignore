@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# Data and outputs (never committed)
+/data/
+/outputs/*
+!/outputs/.gitkeep
+*.parquet
+*.csv
+!tests/fixtures/*.csv
+
+# Solver logs
+*.log
+*.lp
+*.mps
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local editor/tool configuration
+CLAUDE.md
+.claude/
