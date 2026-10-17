@@ -195,6 +195,7 @@ class Config:
     battery_asset: BatteryParams
     fleet: Fleet
     max_interpolation_hours: int = 3
+    root: Path = REPO_ROOT
     raw: Mapping[str, Any] = field(default_factory=dict, repr=False, compare=False)
 
     def __post_init__(self) -> None:
@@ -247,6 +248,7 @@ def build_config(base: Mapping[str, Any], fleet: Mapping[str, Any], root: Path =
         battery_asset=BatteryParams.from_dict(_require(base, "battery_asset", "base config")),
         fleet=Fleet.from_dict(fleet),
         max_interpolation_hours=int((base.get("data") or {}).get("max_interpolation_hours", 3)),
+        root=root,
         raw={"base": copy.deepcopy(dict(base)), "fleet": copy.deepcopy(dict(fleet))},
     )
 
