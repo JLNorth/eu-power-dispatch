@@ -1,0 +1,9 @@
+name: high_wind
+description: "+10 GW of wind, using the historic hourly capacity-factor shape."
+
+# Scale a historic profile column as if installed capacity grew from
+# `installed_mw` to `installed_mw + add_mw`.
+profile_scaling:
+  wind_mw:
+    installed_mw: 30000     # approximate GB wind fleet behind the historic series
+    add_mw: 10000

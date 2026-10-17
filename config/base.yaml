@@ -1,0 +1,43 @@
+# Base run configuration. Paths are resolved relative to the repository root.
+
+project:
+  zone: GB                  # ENTSO-E bidding zone / country code (e.g. GB, DE_LU, FR, NL)
+  currency: GBP             # label only; all prices must already be in this currency
+  start: "2024-01-01"       # inclusive, UTC
+  end: "2025-01-01"         # exclusive, UTC
+
+paths:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  fuels_csv: data/fuels/fuels_daily.csv
+  outputs_dir: outputs
+  fleet_file: config/fleet_gb.yaml
+
+fuels:
+  # Multipliers converting the CSV prices into the model currency.
+  # e.g. TTF in EUR/MWh_th -> GBP/MWh_th: gas_fx ~= 0.85
+  gas_fx: 1.0
+  carbon_fx: 1.0
+  # Flat adder on top of the traded carbon price (e.g. GB Carbon Price Support, 18 GBP/t).
+  carbon_price_adder: 18.0
+
+data:
+  max_interpolation_hours: 3   # gaps up to this length are linearly interpolated
+
+solver:
+  name: highs                  # highs | gurobi | any Pyomo solver name
+  mip_gap: 0.001
+  time_limit_s: 120
+  threads: null
+  options: {}                  # extra solver-specific options passed through verbatim
+
+# Standalone merchant battery used by run_battery.py (price-taker arbitrage study).
+battery_asset:
+  power_mw: 50.0
+  energy_mwh: 100.0
+  round_trip_efficiency: 0.88
+  max_cycles_per_day: 1.5
+  soc_min_frac: 0.05
+  soc_max_frac: 0.95
+  soc_initial_frac: 0.5
+  degradation_cost_per_mwh: 0.0

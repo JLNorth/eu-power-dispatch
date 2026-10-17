@@ -1,0 +1,11 @@
+name: more_storage
+description: "+5 GW / 10 GWh of grid batteries on top of the base storage fleet."
+
+# Added to the base `storage` block in the fleet file.
+storage_add:
+  power_mw: 5000
+  energy_mwh: 10000
+
+# Any other keys can be deep-merged into the fleet file, e.g.:
+# fleet_overrides:
+#   curtailment_cost: 5.0

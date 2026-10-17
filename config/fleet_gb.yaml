@@ -1,0 +1,105 @@
+# Aggregated GB dispatchable fleet serving residual demand
+# (load - wind - solar - nuclear). Figures are indicative round numbers for
+# a stylised 2024 system, not a unit-by-unit register.
+#
+# Units:
+#   capacity_mw, min_stable_mw   MW (electrical)
+#   heat_rate                    MWh_th fuel per MWh_e (= 1 / efficiency)
+#   emissions_factor             tCO2 per MWh_e
+#   start_cost                   currency per start of the aggregated block
+#   vom                          currency per MWh_e
+#   fuel                         key into the fuel price table (gas, biomass) or null
+#   fixed_marginal_cost          used instead of fuel/carbon when fuel is null
+#   committable                  true -> binary on/off + start-up variables
+
+fuel_prices_static:
+  biomass: 22.0               # currency per MWh_th (delivered wood pellet, flat)
+
+units:
+  - name: ccgt_efficient
+    fuel: gas
+    capacity_mw: 14000
+    min_stable_mw: 5000
+    heat_rate: 1.75           # ~57% LHV
+    emissions_factor: 0.35
+    start_cost: 60000
+    vom: 2.5
+    committable: true
+
+  - name: ccgt_mid
+    fuel: gas
+    capacity_mw: 10000
+    min_stable_mw: 4000
+    heat_rate: 1.92           # ~52%
+    emissions_factor: 0.38
+    start_cost: 50000
+    vom: 3.0
+    committable: true
+
+  - name: ccgt_old
+    fuel: gas
+    capacity_mw: 6000
+    min_stable_mw: 2500
+    heat_rate: 2.13           # ~47%
+    emissions_factor: 0.42
+    start_cost: 40000
+    vom: 3.5
+    committable: true
+
+  - name: ocgt
+    fuel: gas
+    capacity_mw: 1500
+    min_stable_mw: 150
+    heat_rate: 2.86           # ~35%
+    emissions_factor: 0.57
+    start_cost: 3000
+    vom: 6.0
+    committable: true
+
+  - name: biomass
+    fuel: biomass
+    capacity_mw: 3500
+    min_stable_mw: 1200
+    heat_rate: 2.63           # ~38%
+    emissions_factor: 0.0     # zero-rated under UK ETS
+    start_cost: 80000
+    vom: 5.0
+    committable: true
+
+  - name: imports
+    fuel: null
+    fixed_marginal_cost: 75.0 # price-taker interconnector proxy
+    capacity_mw: 8000
+    min_stable_mw: 0
+    heat_rate: 0.0
+    emissions_factor: 0.0
+    start_cost: 0
+    vom: 0.0
+    committable: false
+
+  - name: voll_slack
+    fuel: null
+    fixed_marginal_cost: 6000.0  # value of lost load; guarantees feasibility
+    capacity_mw: 100000
+    min_stable_mw: 0
+    heat_rate: 0.0
+    emissions_factor: 0.0
+    start_cost: 0
+    vom: 0.0
+    committable: false
+
+# Cost of curtailing surplus must-run output when residual demand < 0.
+# The clearing price in oversupplied hours equals minus this value.
+curtailment_cost: 0.0
+
+# Grid-scale storage participating in the market model (aggregated).
+storage:
+  enabled: true
+  power_mw: 4000
+  energy_mwh: 6000
+  round_trip_efficiency: 0.86
+  max_cycles_per_day: 2.0
+  soc_min_frac: 0.05
+  soc_max_frac: 0.95
+  soc_initial_frac: 0.5
+  degradation_cost_per_mwh: 1.0
